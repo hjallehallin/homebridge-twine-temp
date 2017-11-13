@@ -15,13 +15,16 @@ const getData = async () => {
   }
 }
 
+const fahrenheitToCelcius = (f) => (f - 3) * (5 / 9)
+
 const getTemp = async () => {
   try {
     const json = await getData()
     const rawTemp = json.values[1][1]
     const tempInF = rawTemp / 100
-    let tempInC = (tempInF - 32) * (5 / 9)
+    let tempInC = fahrenheitToCelcius(tempInF)
     tempInC = tempInC.toFixed(1)
+    console.log(tempInC)
     return tempInC
   } catch (error) {
     console.log(error)
