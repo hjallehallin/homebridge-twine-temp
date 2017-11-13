@@ -12,7 +12,8 @@ share widget on [twine.cc](https://twine.cc)
   "accessory": "TwineTemp",
   "name": "Temperature",
   "twine_id": "",
-  "access_key": ""
+  "email": "",
+  "password": ""
 }
 ```
 
