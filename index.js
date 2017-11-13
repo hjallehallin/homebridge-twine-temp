@@ -38,12 +38,69 @@ class TwineTemp {
         minValue: -50,
         maxValue: 100
       })
-    return [this.informationService, this.temperatureService]
+    this.batteryService = new Service.BatteryService()
+    this.batteryService
+      .getCharacteristic(Characteristic.BatteryLevel)
+      .setProps({ maxValue: 100, minValue: 0, minStep: 1 })
+      .on('get', this.getBatteryLevel.bind(this))
+    this.batteryService
+      .getCharacteristic(Characteristic.ChargingState)
+      .setProps({ maxValue: 1 })
+      .on('get', this.getChargingState.bind(this))
+    this.batteryService
+      .getCharacteristic(Characteristic.StatusLowBattery)
+      .on('get', this.getLowBatteryStatus.bind(this))
+    return [this.informationService, this.batteryService, this.temperatureService]
   }
   getTemperatureUnits (callback) {
     // 0 = C, 1 = F
     this.log('Get temperature units')
     callback(null, 0)
+  }
+  getChargingState (callback) {
+    this.client.fetch((err, response) => {
+      if (!err) {
+        switch (response.meta.battery) {
+          case 'plugged in':
+            return callback(null, 1)
+          default:
+            return callback(null, 0)
+        }
+      } else {
+        callback(err)
+      }
+    })
+  }
+  getLowBatteryStatus (callback) {
+    this.client.fetch((err, response) => {
+      if (!err) {
+        callback(null, response.meta.battery === 'weak' ? 1 : 0)
+      } else {
+        callback(err)
+      }
+    })
+  }
+  getBatteryLevel (callback) {
+    this.client.fetch((err, response) => {
+      if (!err) {
+        switch (response.meta.battery) {
+          case 'full':
+          case 'plugged in':
+            return callback(null, 100)
+          case '2/3':
+            return callback(null, 66)
+          case '1/3':
+            return callback(null, 33)
+          case 'weak':
+            return callback(null, 10)
+          case 'unknown':
+          default:
+            return callback(null, 0)
+        }
+      } else {
+        callback(err)
+      }
+    })
   }
   getTemp (callback) {
     this.client.fetch((err, response) => {
