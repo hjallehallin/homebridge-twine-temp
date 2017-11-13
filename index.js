@@ -15,7 +15,7 @@ const getData = async () => {
   }
 }
 
-const fahrenheitToCelcius = (f) => (f - 3) * (5 / 9)
+const fahrenheitToCelcius = (f) => (f - 32) * (5 / 9)
 
 const getTemp = async () => {
   try {
