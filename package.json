@@ -12,7 +12,12 @@
     "temperature sensor"
   ],
   "engines": {
-    "node": ">=0.12.0",
-    "homebridge": ">=0.2.0"
-  }
+    "node": ">=8.8.1",
+    "homebridge": ">=0.4.29"
+  },
+  "author": "@hjallehallin",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hjallehallin/homebridge-twine-temp.git"
+  },
 }
